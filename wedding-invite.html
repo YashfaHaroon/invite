@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Yashfa & Hannan — Wedding</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Jost:wght@200;300;400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 100%; height: 100%; overflow: hidden; }
+
+:root {
+  --navy:   #0a0e1a;
+  --ivory:  #f7f0e6;
+  --gold:   #b8965a;
+  --gold-d: #8a6e3a;
+  --rose:   #c4858a;
+  --rose-l: #e8c4c0;
+  --ink:    rgba(247,240,230,0.72);
+}
+
+body {
+  background: var(--navy);
+  color: var(--ivory);
+  font-family: 'Cormorant Garamond', serif;
+  cursor: none;
+}
+
+/* ── CURSOR ── */
+#cur {
+  position: fixed; width: 8px; height: 8px;
+  background: var(--gold);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%,-50%);
+  transition: width .3s, height .3s, background .3s;
+  mix-blend-mode: screen;
+}
+#cur.big { width: 36px; height: 36px; background: rgba(184,150,90,0.25); }
+
+/* ── GRAIN ── */
+body::after {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.88' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.055'/%3E%3C/svg%3E");
+  pointer-events: none; z-index: 9998; opacity: .45;
+}
+
+/* ── PROGRESS ── */
+#prog {
+  position: fixed; bottom: 0; left: 0; height: 1px;
+  background: linear-gradient(90deg, var(--gold-d), var(--gold), var(--rose));
+  width: 0; z-index: 200; transition: width .4s ease;
+}
+
+/* ── MUSIC ── */
+#musicBtn {
+  position: fixed; top: 28px; right: 32px; z-index: 500;
+  background: none; border: none; cursor: none;
+  display: flex; align-items: center; gap: 8px;
+  color: rgba(247,240,230,0.3);
+  font-family: 'Jost', sans-serif;
+  font-size: .65rem; font-weight: 300;
+  letter-spacing: .3em; text-transform: uppercase;
+  transition: color .3s;
+}
+#musicBtn:hover { color: rgba(247,240,230,.75); }
+.mbars { display: flex; align-items: flex-end; gap: 2px; height: 14px; }
+.mbars span { display: block; width: 2px; background: currentColor; border-radius: 2px; transform-origin: bottom; }
+.mbars span:nth-child(1){height:7px}
+.mbars span:nth-child(2){height:12px}
+.mbars span:nth-child(3){height:5px}
+.mbars span:nth-child(4){height:10px}
+#musicBtn.on .mbars span:nth-child(1){animation:mb .9s 0s   ease infinite alternate}
+#musicBtn.on .mbars span:nth-child(2){animation:mb .7s .18s ease infinite alternate}
+#musicBtn.on .mbars span:nth-child(3){animation:mb 1s .08s  ease infinite alternate}
+#musicBtn.on .mbars span:nth-child(4){animation:mb .8s .25s ease infinite alternate}
+@keyframes mb { from{transform:scaleY(.25)} to{transform:scaleY(1)} }
+
+/* ── NAV DOTS ── */
+#dots {
+  position: fixed; bottom: 32px; left: 50%;
+  transform: translateX(-50%);
+  display: flex; gap: 10px; align-items: center;
+  z-index: 200; opacity: 0; transition: opacity .5s;
+}
+#dots.show { opacity: 1; }
+.dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: rgba(247,240,230,.2);
+  transition: background .4s, transform .4s;
+  cursor: none;
+}
+.dot.on { background: var(--gold); transform: scale(1.5); }
+
+/* ── ARROW NAV ── */
+#arrowL, #arrowR {
+  position: fixed; top: 50%; z-index: 200;
+  background: none; border: none; cursor: none;
+  color: rgba(247,240,230,.2);
+  font-size: 1.4rem;
+  transform: translateY(-50%);
+  transition: color .3s;
+  padding: 16px;
+  opacity: 0; transition: opacity .5s, color .3s;
+}
+#arrowL { left: 12px; }
+#arrowR { right: 12px; }
+#arrowL.show, #arrowR.show { opacity: 1; }
+#arrowL:hover, #arrowR:hover { color: var(--gold); }
+
+/* ── STAGE ── */
+#stage {
+  position: fixed; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* ── SLIDES ── */
+#slides { position: fixed; inset: 0; z-index: 2; }
+
+.slide {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center;
+  padding: 60px 24px;
+  opacity: 0; pointer-events: none;
+}
+.slide.active { opacity: 1; pointer-events: all; }
+
+/* ── PARTICLES ── */
+#particles {
+  position: fixed; inset: 0; z-index: 1; pointer-events: none;
+}
+
+/* ── TYPE TOKENS ── */
+.t-script {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-weight: 300;
+}
+.t-display {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 600;
+  letter-spacing: -.01em;
+  line-height: .92;
+}
+.t-label {
+  font-family: 'Jost', sans-serif;
+  font-weight: 200;
+  letter-spacing: .35em;
+  font-size: 1.38rem;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+.t-body {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 300;
+  font-size: clamp(1.5rem, 2.8vw, 1.85rem);
+  line-height: 1.9;
+  color: var(--ink);
+}
+
+/* slide animations */
+.reveal { opacity: 0; transform: translateY(22px); }
+.reveal.in { animation: revealUp var(--d,.9s) var(--dl,0s) cubic-bezier(.22,1,.36,1) both; }
+@keyframes revealUp { to { opacity:1; transform:none; } }
+
+.fade { opacity: 0; }
+.fade.in { animation: fadeIn var(--d,.8s) var(--dl,0s) ease both; }
+@keyframes fadeIn { to { opacity: 1; } }
+
+/* ── NAMES HERO ── */
+.names-wrap {
+  position: relative;
+  display: flex; flex-direction: column; align-items: center;
+}
+.name-line {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 600;
+  font-size: clamp(3.8rem, 13vw, 9rem);
+  line-height: .9;
+  letter-spacing: -.02em;
+  color: var(--ivory);
+}
+.name-line.bride { color: var(--ivory); }
+.name-line.groom { color: var(--gold); }
+.ampersand-rule {
+  display: flex; align-items: center; gap: 20px;
+  width: clamp(220px, 50vw, 480px);
+  margin: 16px 0;
+  opacity: 0;
+}
+.ampersand-rule.in { animation: fadeIn .8s .9s ease both; }
+.rule-line { flex: 1; height: 1px; background: var(--gold-d); }
+.amp {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-weight: 300;
+  font-size: 1.6rem;
+  color: var(--rose);
+}
+
+/* ── DATE SLIDE ── */
+.date-big {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 300;
+  font-size: clamp(1.5rem, 2.8vw, 1.7rem);
+  letter-spacing: .28em;
+  color: var(--ink);
+  margin-top: 6px;
+}
+.day-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 600;
+  font-size: clamp(6rem, 20vw, 13rem);
+  line-height: 1;
+  color: var(--ivory);
+  letter-spacing: -.04em;
+}
+.month-year {
+  font-family: 'Jost', sans-serif;
+  font-weight: 200;
+  font-size: clamp(1.25rem, 2.8vw, 1.25rem);
+  letter-spacing: .8em;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-top: -8px;
+}
+
+/* ── VENUE SLIDE ── */
+.venue-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-weight: 300;
+  font-size: clamp(2.4rem, 8vw, 3.9rem);
+  color: var(--ivory);
+  line-height: 1.25;
+  max-width: 700px;
+}
+.venue-city {
+  font-family: 'Jost', sans-serif;
+  font-weight: 200;
+  font-size: clamp(.7rem, 1.5vw, .85rem);
+  letter-spacing: .5em;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-top: 14px;
+}
+.venue-rule {
+  width: 1px; height: 60px;
+  background: linear-gradient(to bottom, transparent, var(--gold-d), transparent);
+  margin: 24px auto;
+  opacity: 0;
+}
+.venue-rule.in { animation: fadeIn .8s .5s ease both; }
+
+/* ── RSVP SLIDE ── */
+.rsvp-number {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 300;
+  font-size: clamp(1.6rem, 4.5vw, 2.6rem);
+  color: var(--ivory);
+  letter-spacing: .08em;
+  margin-top: 8px;
+}
+.rsvp-btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  margin-top: 40px;
+  padding: 15px 44px;
+  border: 1px solid rgba(184,150,90,.45);
+  background: none;
+  color: var(--gold);
+  font-family: 'Jost', sans-serif;
+  font-weight: 300;
+  font-size: .75rem;
+  letter-spacing: .35em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: none;
+  position: relative; overflow: hidden;
+  transition: color .4s;
+}
+.rsvp-btn::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: var(--gold);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform .4s ease;
+}
+.rsvp-btn:hover { color: var(--navy); }
+.rsvp-btn:hover::before { transform: scaleX(1); }
+.rsvp-btn span { position: relative; }
+
+/* ── FINAL SLIDE ── */
+.final-wish {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-weight: 300;
+  font-size: clamp(1.1rem, 3vw, 1.7rem);
+  color: var(--ink);
+  max-width: 480px;
+  line-height: 1.85;
+  margin-top: 20px;
+}
+.final-names-small {
+  font-family: 'Jost', sans-serif;
+  font-weight: 200;
+  font-size: 0.95rem;
+  letter-spacing: .7em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-top: 32px;
+}
+
+/* ── ENTRY ── */
+#entry {
+  position: fixed; inset: 0; z-index: 800;
+  background: var(--navy);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center; gap: 0;
+  transition: opacity 1.2s ease;
+}
+.entry-kicker {
+  font-family: 'Jost', sans-serif;
+  font-weight: 200;
+  font-size: 1.38rem;
+  letter-spacing: .5em;
+  text-transform: uppercase;
+  color: var(--gold);
+  opacity: 0;
+  animation: fadeIn 1.4s .4s ease both;
+  margin-bottom: 18px;
+}
+.entry-names {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 600;
+  font-size: clamp(2.4rem, 8vw, 5.5rem);
+  line-height: 1;
+  color: var(--ivory);
+  opacity: 0;
+  animation: revealUp 1.6s .7s cubic-bezier(.22,1,.36,1) both;
+  letter-spacing: -.02em;
+}
+.entry-names em {
+  font-style: italic;
+  font-weight: 300;
+  color: var(--rose-l);
+}
+.entry-sub {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-weight: 300;
+  font-size: clamp(1.6rem, 2.5vw, 1.8rem);
+  color: rgba(247,240,230,.35);
+  opacity: 0;
+  animation: fadeIn 1.4s 1.3s ease both;
+  margin-top: 12px;
+  margin-bottom: 52px;
+}
+.open-btn {
+  padding: 15px 52px;
+  background: none;
+  border: 1px solid rgba(184,150,90,.4);
+  color: var(--gold);
+  font-family: 'Jost', sans-serif;
+  font-weight: 300;
+  font-size: 1.22rem;
+  letter-spacing: .45em;
+  text-transform: uppercase;
+  cursor: none;
+  position: relative; overflow: hidden;
+  opacity: 0;
+  animation: fadeIn 1.2s 1.8s ease both;
+  transition: color .4s;
+}
+.open-btn::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: var(--gold);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform .4s ease;
+  z-index: -1;
+}
+.open-btn:hover { color: var(--navy); }
+.open-btn:hover::before { transform: scaleX(1); }
+
+/* gold dust particles */
+.p-dot {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  background: var(--gold);
+  opacity: 0;
+  animation: pdrift linear infinite;
+}
+@keyframes pdrift {
+  0%   { opacity:0; transform:translateY(0) scale(1); }
+  10%  { opacity:.5; }
+  90%  { opacity:.2; }
+  100% { opacity:0; transform:translateY(-80vh) scale(0.3); }
+}
+
+@media (max-width: 768px) {
+
+  /* nav arrows — hide them, swipe works on mobile */
+  #arrowL, #arrowR { display: none; }
+
+  /* dots — lift them above the bottom bar */
+  #dots { bottom: 24px; }
+
+  /* music button — smaller */
+  #musicBtn { top: 18px; right: 18px; font-size: .6rem; }
+
+  /* open invite button — smaller */
+  #openBtn { top: -20px; right: center; font-size: .6rem;}
+
+  /* slide padding — more breathing room on sides */
+  .slide { padding: 40px 28px; }
+
+  /* names slide */
+  .name-line { font-size: clamp(3rem, 17vw, 5rem); }
+  .amp { font-size: 1.3rem; }
+
+  /* date slide — the big 26 */
+  .day-num { font-size: clamp(5rem, 26vw, 8rem); margin-bottom: 32px;}
+  .month-year { font-size: clamp(.7rem, 3vw, .9rem); letter-spacing: .4em; margin-bottom: -16px;}
+
+  /* venue */
+  .venue-name { font-size: clamp(1.5rem, 7vw, 2.2rem); }
+  .venue-rule { height: 40px; }
+
+  /* rsvp */
+  .rsvp-number { font-size: clamp(1.3rem, 5.5vw, 2rem); }
+  .rsvp-btn { padding: 13px 28px; font-size: .68rem; letter-spacing: .25em; }
+
+  /* final quote */
+  .final-wish { font-size: clamp(1rem, 4vw, 1.3rem); }
+
+  /* entry screen */
+  .entry-kicker { font-size: clamp(0.5rem, 5vw, 1.5rem); }
+  .entry-names { font-size: clamp(2rem, 11vw, 3.5rem); }
+  .open-btn { padding: 13px 36px; }
+
+  /* last screen */
+  .final-names-small.wedding-names { font-size: clamp(0.3rem, 3.6vw, 1rem) }
+
+  .t-label.wedding-line { font-size: clamp(0.5rem, 5vw, 1.5rem); }
+
+  .t-label.we-love { font-size: clamp(0.5rem, 5vw, 1.5rem); }
+
+  .t-label.ceremony-begins { font-size: clamp(0.5rem, 5vw, 1.5rem); }
+
+  .t-display.wedding-name{ font-size: clamp(6rem, 28vw, 9rem);}
+
+  .margin-flexbox {margin-top:-32px}
+}
+</style>
+</head>
+<body>
+
+<div id="cur"></div>
+<canvas id="particles"></canvas>
+<div id="prog"></div>
+
+<!-- MUSIC -->
+<button id="musicBtn">
+  <div class="mbars"><span></span><span></span><span></span><span></span></div>
+  music
+</button>
+
+<!-- NAV -->
+<div id="dots"></div>
+<button id="arrowL">&#8592;</button>
+<button id="arrowR">&#8594;</button>
+
+<!-- ENTRY -->
+<div id="entry">
+  <p class="entry-kicker">You are warmly invited</p>
+  <h1 class="entry-names">Yashfa <em>&</em> Hannan</h1>
+  <p class="entry-sub">are getting married</p>
+  <button class="open-btn" id="openBtn">Open Invitation</button>
+</div>
+
+<!-- SLIDES -->
+<div id="slides"></div>
+
+<script>
+// ── CURSOR ──────────────────────────────────
+const cur = document.getElementById('cur');
+document.addEventListener('mousemove', e => {
+  cur.style.left = e.clientX + 'px';
+  cur.style.top  = e.clientY + 'px';
+});
+document.querySelectorAll('button, a').forEach(el => {
+  el.addEventListener('mouseenter', () => cur.classList.add('big'));
+  el.addEventListener('mouseleave', () => cur.classList.remove('big'));
+});
+
+// ── MUSIC ────────────────────────────────────
+const audio = new Audio('Dreamer.mp3');
+audio.loop = true;
+let musicOn = false;
+const mBtn = document.getElementById('musicBtn');
+mBtn.addEventListener('click', () => {
+  musicOn = !musicOn;
+  musicOn ? audio.play() : audio.pause();
+  mBtn.classList.toggle('on', musicOn);
+});
+
+// ── GOLD DUST PARTICLES ──────────────────────
+const pCanvas = document.getElementById('particles');
+const pCtx    = pCanvas.getContext('2d');
+let pw, ph, dots = [];
+
+function resizeP() {
+  pw = pCanvas.width  = window.innerWidth;
+  ph = pCanvas.height = window.innerHeight;
+}
+resizeP(); window.addEventListener('resize', resizeP);
+
+function spawnDot(x, y) {
+  dots.push({
+    x: x ?? Math.random() * pw,
+    y: y ?? ph + 10,
+    vx: (Math.random() - .5) * .8,
+    vy: -.4 - Math.random() * 1.2,
+    r:  1 + Math.random() * 2.5,
+    life: 1,
+    dec: .004 + Math.random() * .004,
+    hue: Math.random() > .6 ? '#b8965a' : '#c4858a'
+  });
+}
+
+let lastSpawn = 0;
+function animDots(ts) {
+  pCtx.clearRect(0, 0, pw, ph);
+  if (ts - lastSpawn > 600 && currentSlide >= 0) {
+    spawnDot(); lastSpawn = ts;
+  }
+  dots = dots.filter(d => d.life > 0);
+  dots.forEach(d => {
+    d.x += d.vx; d.y += d.vy; d.life -= d.dec;
+    pCtx.save();
+    pCtx.globalAlpha = d.life * .55;
+    pCtx.fillStyle = d.hue;
+    pCtx.beginPath();
+    pCtx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
+    pCtx.fill();
+    pCtx.restore();
+  });
+  requestAnimationFrame(animDots);
+}
+requestAnimationFrame(animDots);
+
+// ── SLIDE DEFINITIONS ────────────────────────
+const SLIDES = [
+
+  // 0 — NAMES
+  {
+    dur: 7000,
+    build(el) {
+      el.innerHTML = `
+        <div class="names-wrap">
+          <div class="name-line bride reveal" style="--dl:.1s">Yashfa</div>
+          <div class="ampersand-rule">
+            <div class="rule-line"></div>
+            <div class="amp">&</div>
+            <div class="rule-line"></div>
+          </div>
+          <div class="name-line groom reveal" style="--dl:.35s">Hannan</div>
+        </div>
+        <p class="t-label wedding-line fade" style="--dl:1.2s;margin-top:36px">invite you to celebrate their wedding</p>
+      `;
+      run(el);
+    }
+  },
+
+  // 1 — DATE
+  {
+    dur: 6500,
+    build(el) {
+      el.innerHTML = `
+        <p class="t-label reveal" style="--dl:.1s">Save the date</p>
+        <div class="day-num reveal" style="--dl:.3s">26</div>
+        <div class="month-year reveal" style="--dl:.55s">December &nbsp; 2026</div>
+        <div class="date-big fade" style="--dl:1s;margin-top:28px">Saturday</div>
+      `;
+      run(el);
+    }
+  },
+
+  // 2 — TIME
+  {
+    dur: 9000,
+    build(el) {
+      el.innerHTML = `
+        <p class="t-label ceremony-begins reveal" style="--dl:.1s">The ceremony begins</p>
+        <div class="t-display wedding-name reveal" style="--dl:.4s;font-size:clamp(3rem,11vw,7.5rem); margin-top:5vh; margin-bottom:2vh;color:var(--ivory)">Noon</div>
+        <p class="t-body fade" style="--dl:.9s;margin-top:16px;max-width:400px">
+          Dress beautifully.<br>Arrive with joy.<br>Remember us in your prayers.
+        </p>
+      `;
+      run(el);
+    }
+  },
+
+  // 3 — VENUE
+  {
+    dur: 7000,
+    build(el) {
+      el.innerHTML = `
+        <p class="t-label reveal" style="--dl:.1s">The venue</p>
+        <div class="venue-rule in"></div>
+        <div class="venue-name reveal" style="--dl:.5s">Garrison Officers' Mess</div>
+        <div class="venue-city reveal" style="--dl:.8s">Bara Dari &nbsp;·&nbsp; Rawalpindi</div>
+      `;
+      run(el);
+    }
+  },
+
+  // 4 — RSVP
+  {
+    dur: 99999,
+    build(el) {
+      el.innerHTML = `
+        <p class="t-label we-love reveal" style="--dl:.1s">We would love to have you with us</p>
+        <a href="https://wa.me/923100070003" target="_blank" class="rsvp-number reveal" style="--dl:.45s; text-decoration:none;">0310 007 0003</a>
+        <p class="t-body fade" style="--dl:.9s;margin-top:14px;color:rgba(247,240,230,.45);font-size:clamp(.85rem,1.8vw,1rem)">
+          For any queries please call or WhatsApp us at the number above.
+        </p>
+        
+        <div class="margin-flexbox" style="display:flex;flex-direction:column;align-items:center">
+
+        <a href="https://maps.app.goo.gl/easAc3SJpfMaPKbt7" target="_blank" class="rsvp-btn reveal" style="--dl:1.1s">
+          <span>Open maps</span>
+        </a>
+        <a href="invite.png" download="Wifey-and-Hussie-Wedding-Invitation.png" class="rsvp-btn reveal" style="--dl:1.4s;margin-top:16px">
+          <span>Download invitation</span></a>
+
+          </div>
+
+        
+
+        <p class="final-wish fade" style="--dl:1.6s">
+          "And He placed between you<br>affection and mercy."
+        </p>
+        
+        <p class="final-names-small wedding-names fade" style="--dl:2s">
+          <span class="wn-names">Yashfa &amp; Hannan</span><span class="wn-dot">&nbsp;·&nbsp;</span><span class="wn-date">26 December 2026</span>
+          </p>
+      `;
+      run(el);
+      // burst dots on final slide
+      setTimeout(() => {
+        for (let i = 0; i < 18; i++)
+          setTimeout(() => spawnDot(Math.random()*pw, Math.random()*ph*.6), i*80);
+      }, 1400);
+    }
+  }
+];
+
+function run(el) {
+  // trigger all reveal / fade children
+  setTimeout(() => {
+    el.querySelectorAll('.reveal').forEach(n => n.classList.add('in'));
+    el.querySelectorAll('.fade').forEach(n => n.classList.add('in'));
+    el.querySelectorAll('.ampersand-rule').forEach(n => n.classList.add('in'));
+    el.querySelectorAll('.venue-rule').forEach(n => n.classList.add('in'));
+  }, 60);
+}
+
+// ── ENGINE ───────────────────────────────────
+let currentSlide = -1, timer = null;
+const slidesEl = document.getElementById('slides');
+const dotsEl   = document.getElementById('dots');
+const prog     = document.getElementById('prog');
+const arrowL   = document.getElementById('arrowL');
+const arrowR   = document.getElementById('arrowR');
+
+SLIDES.forEach((_, i) => {
+  const d = document.createElement('div');
+  d.className = 'dot';
+  d.addEventListener('click', () => goTo(i));
+  dotsEl.appendChild(d);
+});
+
+function goTo(idx) {
+  if (idx < 0 || idx >= SLIDES.length) return;
+  clearTimeout(timer);
+
+  const prev = slidesEl.querySelector('.slide.active');
+  if (prev) {
+    prev.style.transition = 'opacity .7s ease';
+    prev.style.opacity = '0';
+    setTimeout(() => prev.remove(), 750);
+  }
+
+  currentSlide = idx;
+  const el = document.createElement('div');
+  el.className = 'slide';
+  el.style.opacity = '0';
+  el.style.transition = 'opacity .7s ease';
+  slidesEl.appendChild(el);
+  SLIDES[idx].build(el);
+  setTimeout(() => { el.style.opacity = '1'; el.classList.add('active'); }, prev ? 620 : 40);
+
+  // progress
+  prog.style.width = `${((idx + 1) / SLIDES.length) * 100}%`;
+
+  // dots
+  dotsEl.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('on', i === idx));
+
+  // auto-advance
+  if (idx < SLIDES.length - 1)
+    timer = setTimeout(() => goTo(idx + 1), SLIDES[idx].dur);
+}
+
+arrowR.addEventListener('click', () => goTo(Math.min(currentSlide + 1, SLIDES.length - 1)));
+arrowL.addEventListener('click', () => goTo(Math.max(currentSlide - 1, 0)));
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === ' ') goTo(Math.min(currentSlide + 1, SLIDES.length - 1));
+  if (e.key === 'ArrowLeft')  goTo(Math.max(currentSlide - 1, 0));
+});
+
+let tx = 0;
+document.addEventListener('touchstart', e => tx = e.touches[0].clientX);
+document.addEventListener('touchend',   e => {
+  const dx = e.changedTouches[0].clientX - tx;
+  if (Math.abs(dx) > 45) dx < 0 ? goTo(currentSlide + 1) : goTo(currentSlide - 1);
+});
+
+// ── ENTRY ────────────────────────────────────
+document.getElementById('openBtn').addEventListener('click', () => {
+  const entry = document.getElementById('entry');
+  entry.style.opacity = '0';
+  entry.style.pointerEvents = 'none';
+  setTimeout(() => entry.style.display = 'none', 1200);
+  dotsEl.classList.add('show');
+  arrowL.classList.add('show');
+  arrowR.classList.add('show');
+  musicOn = true; audio.play(); mBtn.classList.add('on');
+  goTo(0);
+  for (let i = 0; i < 12; i++)
+    setTimeout(() => spawnDot(Math.random()*pw, ph*.5 + Math.random()*ph*.5), i*90);
+});
+</script>
+</body>
+</html>
