@@ -366,10 +366,10 @@ body::after {
   border: 1px solid rgba(184,150,90,.4);
   background: linear-gradient(180deg, rgba(184,150,90,.14), rgba(184,150,90,.03));
   box-shadow:
-    0 1px 0 rgba(247,240,230,.18) inset,   /* light edge on top */
-    0 6px 0 rgba(138,110,58,.55),          /* solid "thickness" under the button */
-    0 14px 24px rgba(0,0,0,.55),           /* soft drop shadow */
-    0 0 28px rgba(184,150,90,.18);         /* faint gold glow */
+    0 1px 0 rgba(247,240,230,.18) inset,
+    0 6px 14px rgba(138,110,58,.45),    /* was 0 6px 0, now blurred */
+    0 16px 32px rgba(0,0,0,.5),
+    0 0 30px rgba(184,150,90,.2);
   transition: color .4s, transform .25s ease, box-shadow .25s ease;
   color: var(--gold);
   font-family: 'Jost', sans-serif;
@@ -396,8 +396,8 @@ body::after {
   transform: translateY(-3px);
   box-shadow:
     0 1px 0 rgba(247,240,230,.25) inset,
-    0 9px 0 rgba(138,110,58,.55),
-    0 20px 32px rgba(0,0,0,.6),
+    0 10px 20px rgba(138,110,58,.45),
+    0 24px 40px rgba(0,0,0,.55),
     0 0 40px rgba(184,150,90,.3);
 }
 .open-btn:hover::before { transform: scaleX(1); }
