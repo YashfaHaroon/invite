@@ -362,13 +362,15 @@ body::after {
 }
 .open-btn {
   padding: 15px 52px;
-  background: none;
+  /* background: none; */
   border: 1px solid rgba(184,150,90,.4);
+  background: linear-gradient(180deg, rgba(184,150,90,.14), rgba(184,150,90,.03));
   box-shadow:
     0 1px 0 rgba(247,240,230,.18) inset,   /* light edge on top */
     0 6px 0 rgba(138,110,58,.55),          /* solid "thickness" under the button */
     0 14px 24px rgba(0,0,0,.55),           /* soft drop shadow */
     0 0 28px rgba(184,150,90,.18);         /* faint gold glow */
+  transition: color .4s, transform .25s ease, box-shadow .25s ease;
   color: var(--gold);
   font-family: 'Jost', sans-serif;
   font-weight: 300;
@@ -379,7 +381,7 @@ body::after {
   position: relative; overflow: hidden;
   opacity: 0;
   animation: fadeIn 1.2s 1.8s ease both;
-  transition: color .4s;
+  /* transition: color .4s; */
 }
 .open-btn::before {
   content: '';
@@ -389,7 +391,15 @@ body::after {
   transition: transform .4s ease;
   z-index: -1;
 }
-.open-btn:hover { color: var(--navy); }
+.open-btn:hover { 
+  color: var(--navy);
+  transform: translateY(-3px);
+  box-shadow:
+    0 1px 0 rgba(247,240,230,.25) inset,
+    0 9px 0 rgba(138,110,58,.55),
+    0 20px 32px rgba(0,0,0,.6),
+    0 0 40px rgba(184,150,90,.3);
+}
 .open-btn:hover::before { transform: scaleX(1); }
 
 /* gold dust particles */
