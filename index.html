@@ -364,6 +364,11 @@ body::after {
   padding: 15px 52px;
   background: none;
   border: 1px solid rgba(184,150,90,.4);
+  box-shadow:
+    0 1px 0 rgba(247,240,230,.18) inset,   /* light edge on top */
+    0 6px 0 rgba(138,110,58,.55),          /* solid "thickness" under the button */
+    0 14px 24px rgba(0,0,0,.55),           /* soft drop shadow */
+    0 0 28px rgba(184,150,90,.18);         /* faint gold glow */
   color: var(--gold);
   font-family: 'Jost', sans-serif;
   font-weight: 300;
@@ -481,7 +486,7 @@ body::after {
   <p class="entry-kicker">You are warmly invited</p>
   <h1 class="entry-names">Yashfa <em>&</em> Hannan</h1>
   <p class="entry-sub">are getting married</p>
-  <button class="open-btn" id="openBtn">Open Invitation</button>
+  <button class="open-btn" id="openBtn">Invitation</button>
 </div>
 
 <!-- SLIDES -->
@@ -563,6 +568,7 @@ const SLIDES = [
     dur: 7000,
     build(el) {
       el.innerHTML = `
+      <p class="t-label wedding-line fade" style="--dl:1.2s;margin-top:36px">Mrs & Maj Haroon Tariq request the pleasure of your gracious presence at the Barat Ceremony of</p>
         <div class="names-wrap">
           <div class="name-line bride reveal" style="--dl:.1s">Yashfa Haroon</div>
           <div class="ampersand-rule">
@@ -572,7 +578,7 @@ const SLIDES = [
           </div>
           <div class="name-line groom reveal" style="--dl:.35s">Hannan Sadeed Ahmad</div>
         </div>
-        <p class="t-label wedding-line fade" style="--dl:1.2s;margin-top:36px">together with their families request the pleasure of your gracious presence to celebrate their wedding</p>
+        
       `;
       run(el);
     }
@@ -583,7 +589,7 @@ const SLIDES = [
     dur: 6500,
     build(el) {
       el.innerHTML = `
-        <p class="t-label reveal" style="--dl:.1s">Save the date</p>
+        <p class="t-label reveal" style="--dl:.1s">Date to remember</p>
         <div class="day-num reveal" style="--dl:.3s">26</div>
         <div class="month-year reveal" style="--dl:.55s">December &nbsp; 2026</div>
         <div class="date-big fade" style="--dl:1s;margin-top:28px">Saturday</div>
@@ -600,7 +606,7 @@ const SLIDES = [
         <p class="t-label ceremony-begins reveal" style="--dl:.1s">The ceremony begins</p>
         <div class="t-display wedding-name reveal" style="--dl:.4s;font-size:clamp(3rem,11vw,7.5rem); margin-top:5vh; margin-bottom:2vh;color:var(--ivory)">Noon</div>
         <p class="t-body fade" style="--dl:.9s;margin-top:16px;max-width:400px">
-          Dress beautifully.<br>Arrive with joy.<br>Remember us in your prayers.
+          Join us as two families become one.<br>Arrive with joy.<br>Remember the couple in your prayers.
         </p>
       `;
       run(el);
@@ -629,7 +635,7 @@ const SLIDES = [
         <p class="t-label we-love reveal" style="--dl:.1s">We would love to have you with us</p>
         <a href="https://wa.me/923100070003" target="_blank" class="rsvp-number reveal" style="--dl:.45s; text-decoration:none;">0310 007 0003</a>
         <p class="t-body fade" style="--dl:.9s;margin-top:14px;color:rgba(247,240,230,.45);font-size:clamp(.85rem,1.8vw,1rem)">
-          For any queries please call or WhatsApp us at the number above.
+          ~ Maj Haroon Tariq ~
         </p>
         
         <div class="margin-flexbox" style="display:flex;flex-direction:column;align-items:center">
@@ -637,7 +643,7 @@ const SLIDES = [
         <a href="https://maps.app.goo.gl/easAc3SJpfMaPKbt7" target="_blank" class="rsvp-btn reveal" style="--dl:1.1s">
           <span>Open maps</span>
         </a>
-        <a href="invite.png" download="Wifey-and-Hussie-Wedding-Invitation.png" class="rsvp-btn reveal" style="--dl:1.4s;margin-top:16px">
+        <a href="invite.png" download="Happy-Family-Wedding-Invitation.png" class="rsvp-btn reveal" style="--dl:1.4s;margin-top:16px">
           <span>Download invitation</span></a>
 
           </div>
@@ -645,11 +651,13 @@ const SLIDES = [
         
 
         <p class="final-wish fade" style="--dl:1.6s">
-          "And He placed between you<br>affection and mercy."
+          "and He has put affection and tenderness<br>between you."
         </p>
         
+        <p class="t-label fade" style="--dl:1.8s;margin-top:8px">Ar-Rum · 30:22</p>
+        
         <p class="final-names-small wedding-names fade" style="--dl:2s">
-          <span class="wn-names">Yashfa &amp; Hannan</span><span class="wn-dot">&nbsp;·&nbsp;</span><span class="wn-date">26 December 2026</span>
+          <span class="wn-date">26 December 2026</span>
           </p>
       `;
       run(el);
